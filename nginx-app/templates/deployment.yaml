@@ -1,19 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "helm-guestbook.fullname" . }}
+  name: {{ include "nginx-app.fullname" . }}
+  labels:
+    app: {{ include "nginx-app.name" . }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: {{ include "helm-guestbook.name" . }}
+      app: {{ include "nginx-app.name" . }}
   template:
     metadata:
       labels:
-        app: {{ include "helm-guestbook.name" . }}
+        app: {{ include "nginx-app.name" . }}
     spec:
       containers:
-        - name: {{ include "helm-guestbook.name" . }}
+        - name: nginx
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
@@ -29,5 +31,5 @@ spec:
               path: /
               port: {{ .Values.containerPort }}
             initialDelaySeconds: 10
-            periodSeconds: 20
+            periodSeconds: 10
 
